@@ -48,24 +48,10 @@ public class CalcTransTarifas {
                 }
             }
 
-            double tarifaOnibusA, tarifaTaxiB, tarifaAplicativoC, tarifaTransExecD;
-            tarifaOnibusA = 0.5;
-            tarifaTaxiB = 2;
-            tarifaAplicativoC = 1.2;
-            tarifaTransExecD = 3;
-
-            double valorTarifa = switch (transporte) {
-                case "A" -> tarifaOnibusA * distancia;
-                case "B" -> tarifaTaxiB * distancia;
-                case "C" -> tarifaAplicativoC * distancia;
-                case "D" -> tarifaTransExecD * distancia;
-                default -> throw new IllegalStateException();
-            };
-
+            double valorTarifa = calculoTarifa(transporte, distancia);
             System.out.printf("💲 Valor total da viagem: R$ %.2f%n", valorTarifa);
 
             List<String> respostas = new ArrayList<>(Arrays.asList("S", "N"));
-
             while (true) {
                 System.out.print("🔃 Deseja calcular outra viagem? (S/N): ");
                 resposta = scanner.nextLine().trim().toUpperCase();
@@ -77,6 +63,21 @@ public class CalcTransTarifas {
             }
         } while (!resposta.equals("N"));
 
+        System.out.println("👋🏻 Desejamos uma boa viagem!");
         scanner.close();
+    }
+    static double calculoTarifa(String transporte, double distancia) {
+        double tarifaOnibusA = 0.5;
+        double tarifaTaxiB = 2;
+        double tarifaAplicativoC = 1.2;
+        double tarifaTransExecD = 3;
+
+        return switch (transporte) {
+            case "A" -> tarifaOnibusA * distancia;
+            case "B" -> tarifaTaxiB * distancia;
+            case "C" -> tarifaAplicativoC * distancia;
+            case "D" -> tarifaTransExecD * distancia;
+            default -> throw new IllegalStateException();
+        };
     }
 }
