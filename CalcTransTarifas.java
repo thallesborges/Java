@@ -1,12 +1,9 @@
 import java.util.Scanner;
 import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
 
 public class CalcTransTarifas {
-    public static void main(String[] args) throws InterruptedException {
-        Scanner scanner = new Scanner (System.in);
-        List<String> transportes = new ArrayList<>(Arrays.asList("A", "B", "C", "D"));
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
         String resposta;
         do {
@@ -19,17 +16,13 @@ public class CalcTransTarifas {
                 System.out.println("C. Aplicativo (carona)");
                 System.out.println("D. Transporte executivo");
 
-                String opcao;
                 System.out.print("♠ Opção: ");
-                opcao = scanner.nextLine().trim().toUpperCase();
+                transporte = scanner.nextLine().trim().toUpperCase();
 
-                if (!transportes.contains(opcao)) {
+                if (!Constantes.TRANSPORTES.contains(transporte)) {
                     System.out.println("❌ Tipo de transporte inválido! Por favor, insira: A, B, C ou D.");
-                    Thread.sleep(1000);
                     continue;
                 }
-
-                transporte = opcao;
                 break;
             }
 
@@ -48,14 +41,14 @@ public class CalcTransTarifas {
                 }
             }
 
+
             double valorTarifa = calculoTarifa(transporte, distancia);
             System.out.printf("💲 Valor total da viagem: R$ %.2f%n", valorTarifa);
 
-            List<String> respostas = new ArrayList<>(Arrays.asList("S", "N"));
             while (true) {
                 System.out.print("🔃 Deseja calcular outra viagem? (S/N): ");
                 resposta = scanner.nextLine().trim().toUpperCase();
-                if (!respostas.contains(resposta)) {
+                if (!Constantes.RESPOSTAS.contains(resposta)) {
                     System.out.println("❌ Erro! Por favor, insira apenas 'S' para SIM ou 'N' para NÃO.");
                     continue;
                 }
@@ -63,21 +56,27 @@ public class CalcTransTarifas {
             }
         } while (!resposta.equals("N"));
 
-        System.out.println("👋🏻 Desejamos uma boa viagem!");
+        System.out.println("👋🏻 Encerrando o programa, até mais!");
         scanner.close();
     }
-    static double calculoTarifa(String transporte, double distancia) {
-        double tarifaOnibusA = 0.5;
-        double tarifaTaxiB = 2;
-        double tarifaAplicativoC = 1.2;
-        double tarifaTransExecD = 3;
 
+    public static double calculoTarifa(String transporte, double distancia) {
         return switch (transporte) {
-            case "A" -> tarifaOnibusA * distancia;
-            case "B" -> tarifaTaxiB * distancia;
-            case "C" -> tarifaAplicativoC * distancia;
-            case "D" -> tarifaTransExecD * distancia;
-            default -> throw new IllegalStateException();
+            case "A" -> Constantes.TARIFA_ONIBUS * distancia;
+            case "B" -> Constantes.TARIFA_TAXI * distancia;
+            case "C" -> Constantes.TARIFA_APP * distancia;
+            case "D" -> Constantes.TARIFA_EXECUTIVO * distancia;
+            default -> throw new IllegalStateException("Transporte inválido: " + transporte);
         };
     }
+}
+
+class Constantes {
+    public static final List<String> TRANSPORTES = List.of("A", "B", "C", "D");
+    public static final List<String> RESPOSTAS = List.of("S", "N");
+
+    public static final double TARIFA_ONIBUS = 0.5;
+    public static final double TARIFA_TAXI = 2.0;
+    public static final double TARIFA_APP = 1.2;
+    public static final double TARIFA_EXECUTIVO = 3.0;
 }
